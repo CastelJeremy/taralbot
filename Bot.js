@@ -10,6 +10,7 @@ function Bot() {
 Bot.prototype.onIdle = function() {
 	logger.info(`${this.connection.joinConfig.guildId} - Idling`);
 
+	clearTimeout(this.idling);
 	this.idling = setTimeout(this.leaveVoiceChannel.bind(this), 2*60*1000);
 }
 
