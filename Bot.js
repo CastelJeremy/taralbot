@@ -4,18 +4,13 @@ import logger from './logHandler.js';
 function Bot() {
 	this.connection = null;
 	this.player = null;
-	this.idling = false;
+	this.idling = null;
 }
 
 Bot.prototype.onIdle = function() {
 	logger.info(`${this.connection.joinConfig.guildId} - Idling`);
 
-	this.idling = true;
-
-	setTimeout(() => {
-		if (this.idling)
-			this.leaveVoiceChannel();
-	}, 2*60*1000);
+	this.idling = setTimeout(this.leaveVoiceChannel.bind(this), 2*60*1000);
 }
 
 Bot.prototype.onDisconnect = function() {
@@ -53,7 +48,7 @@ Bot.prototype.play = function(resource) {
 	if (this.player)
 		this.player.play(resource);
 
-	this.idling = false;
+	clearTimeout(this.idling);
 }
 
 Bot.prototype.stop = function() {
