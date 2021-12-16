@@ -44,13 +44,20 @@ async function play (bot, message) {
 	}
 }
 
-function stop (bot) {
+function skip (bot) {
 	if (bot.player)
 		bot.stop();
 }
 
-function help (message) {
-	message.channel.send("Salut petit animal 🐖,\nMes commandes commencent toujours par un **!tbk** suivi d'un mot clé. Voici la liste des mots clé que tu peux utiliser:\n```\n!tbk play < titre / lien video youtube >\n!tbk stop\n!tbk help\n```");
+function stop (bot) {
+	if (bot.player) {
+		bot.clear();
+		bot.stop();
+	}
 }
 
-export { play, stop, help };
+function help (message) {
+	message.channel.send("Salut petit animal 🐖,\nMes commandes commencent toujours par un **!tbk** suivi d'un mot clé. Voici la liste des mots clé que tu peux utiliser:\n```\n!tbk play < titre / lien video youtube >\n!tbk skip\n!tbk stop\n!tbk help\n```");
+}
+
+export { play, skip, stop, help };

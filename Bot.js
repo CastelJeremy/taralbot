@@ -5,13 +5,18 @@ function Bot() {
 	this.connection = null;
 	this.player = null;
 	this.idling = null;
+	this.queue = [];
 }
 
 Bot.prototype.onIdle = function() {
 	logger.info(`${this.connection.joinConfig.guildId} - Idling`);
 
-	clearTimeout(this.idling);
-	this.idling = setTimeout(this.leaveVoiceChannel.bind(this), 2*60*1000);
+	if (this.queue.length > 0) {
+		this.play(this.queue.shift());
+	} else {
+		clearTimeout(this.idling);
+		this.idling = setTimeout(this.leaveVoiceChannel.bind(this), 2*60*1000);
+	}
 }
 
 Bot.prototype.onDisconnect = function() {
@@ -44,10 +49,15 @@ Bot.prototype.joinVoiceChannel = function(channelId, guildId, voiceAdapterCreato
 }
 
 Bot.prototype.play = function(resource) {
-	logger.info(`${this.connection.joinConfig.guildId} - Playing`);
-
-	if (this.player)
-		this.player.play(resource);
+	if (this.player) {
+		if (this.player.state.status === AudioPlayerStatus.Idle) {
+			logger.info(`${this.connection.joinConfig.guildId} - Playing`);
+			this.player.play(resource);
+		} else {
+			logger.info(`${this.connection.joinConfig.guildId} - Enqueuing`);
+			this.queue.push(resource);
+		}
+	}
 
 	clearTimeout(this.idling);
 }
@@ -57,6 +67,13 @@ Bot.prototype.stop = function() {
 
 	if (this.player)
 		this.player.stop();
+}
+
+Bot.prototype.clear = function() {
+	logger.info(`${this.connection.joinConfig.guildId} - Clearing`);
+
+	if (this.queue.length > 0)
+		this.queue = [];
 }
 
 Bot.prototype.leaveVoiceChannel = function() {

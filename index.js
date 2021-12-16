@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 import { Client, Intents } from 'discord.js';
-import { play, stop, help } from './commandHandler.js';
+import { play, skip, stop, help } from './commandHandler.js';
 import logger from './logHandler.js';
 import Bot from './Bot.js';
 
@@ -28,6 +28,9 @@ client.on('messageCreate', async (message) => {
 			switch (cmd) {
 				case 'play':
 					await play(instances[message.guildId], message);
+					break;
+				case 'skip':
+					skip(instances[message.guildId]);
 					break;
 				case 'stop':
 					stop(instances[message.guildId]);
