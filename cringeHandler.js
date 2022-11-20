@@ -49,7 +49,7 @@ function isCringe(message) {
     //     'maxCoCringe': maxCoCringe
     // });
 
-    if (nbCringe > 1 && nbWord > 2)
+    if (nbCringe > 1 && words.length > 2)
         return (((nbCringeWord / words.length) > 0.1) || ((nbCringe / size) > 0.1) || (maxCoCringe > 5));
 
     return false;
