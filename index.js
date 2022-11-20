@@ -44,8 +44,7 @@ client.on('messageCreate', async (message) => {
 		}
 
 		if (isCringe(message.content)) {
-			message.delete();
-			message.channel.send('Ce message à été jugé comme "CRINGE" par mon IA :saluting_face:');
+			message.reply('Ce message à été jugé comme "CRINGE" par mon IA :saluting_face:')
 		}
 	} catch(e) {
 		logger.error(e);
