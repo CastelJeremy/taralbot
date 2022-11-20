@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises';
 import { Client, Intents } from 'discord.js';
 import { play, skip, stop, help } from './commandHandler.js';
+import { isCringe } from './cringeHandler.js';
 import logger from './logHandler.js';
 import Bot from './Bot.js';
 
@@ -40,6 +41,11 @@ client.on('messageCreate', async (message) => {
 					break;
 				default:
 			}
+		}
+
+		if (isCringe(message.content)) {
+			message.delete();
+			message.channel.send('Ce message à été jugé comme "CRINGE" par mon IA :saluting_face:');
 		}
 	} catch(e) {
 		logger.error(e);
