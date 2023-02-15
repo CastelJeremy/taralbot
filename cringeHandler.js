@@ -1,18 +1,18 @@
 /**
  * Checks wether the given message is cringe or acceptable.
- * 
+ *
  * Cringe message defines messages which contains too much emoji.
- * 
- * @param {String} message 
- * 
+ *
+ * @param {String} message
+ *
  * @return {Boolean} True if cringe, else False
  */
 function isCringe(message) {
     let size = 0;
     let nbCringe = 0;
     let nbCringeWord = 0;
-    let coCringe = 0;       // Current number of consecutive cringe character
-    let maxCoCringe = 0;    // Maximum number of consecutive cringe character
+    let coCringe = 0; // Current number of consecutive cringe character
+    let maxCoCringe = 0; // Maximum number of consecutive cringe character
 
     let words = message.split(' ');
 
@@ -27,7 +27,7 @@ function isCringe(message) {
                 if (coCringe == 1) {
                     nbCringeWord++;
                 }
-    
+
                 if (coCringe > maxCoCringe) {
                     maxCoCringe = coCringe;
                 }
@@ -49,8 +49,13 @@ function isCringe(message) {
     //     'maxCoCringe': maxCoCringe
     // });
 
-    if (nbCringe > 1 && words.length > 2)
-        return (((nbCringeWord / words.length) > 0.1) || ((nbCringe / size) > 0.1) || (maxCoCringe > 5));
+    if (nbCringe > 1 && words.length > 2) {
+        return (
+            nbCringeWord / words.length > 0.1 ||
+            nbCringe / size > 0.1 ||
+            maxCoCringe > 5
+        );
+    }
 
     return false;
 }

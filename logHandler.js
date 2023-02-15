@@ -1,44 +1,49 @@
 function log(message) {
-	const now = new Date();
+    const now = new Date();
 
-	let timeString = '['
+    let timeString = '[';
 
-	timeString += now.getFullYear() + '/';
-	
-	if ((now.getMonth() + 1) < 10)
-		timeString += '0';
+    timeString += now.getFullYear() + '/';
 
-	timeString += (now.getMonth() + 1) + '/';
+    if (now.getMonth() + 1 < 10) {
+        timeString += '0';
+    }
 
-	if (now.getDate() < 10)
-		timeString += '0';
+    timeString += now.getMonth() + 1 + '/';
 
-	timeString += now.getDate() + ' ';
+    if (now.getDate() < 10) {
+        timeString += '0';
+    }
 
-	if (now.getHours() < 10)
-		timeString += '0';
+    timeString += now.getDate() + ' ';
 
-	timeString += now.getHours() + ':';
+    if (now.getHours() < 10) {
+        timeString += '0';
+    }
 
-	if (now.getMinutes() < 10)
-		timeString += '0';
+    timeString += now.getHours() + ':';
 
-	timeString += now.getMinutes() + ':';
+    if (now.getMinutes() < 10) {
+        timeString += '0';
+    }
 
-	if (now.getSeconds() < 10)
-		timeString += '0';
+    timeString += now.getMinutes() + ':';
 
-	timeString += now.getSeconds() + '] ';
+    if (now.getSeconds() < 10) {
+        timeString += '0';
+    }
 
-	console.log(timeString + message);
+    timeString += now.getSeconds() + '] ';
+
+    console.log(timeString + message);
 }
 
 function info(message) {
-	log(message);
+    log(message);
 }
 
 function error(message) {
-	log(message);
+    log(message);
 }
 
 export default { info, error };
