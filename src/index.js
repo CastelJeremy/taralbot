@@ -1,4 +1,3 @@
-import { readFile } from 'fs/promises';
 import { Client, Intents } from 'discord.js';
 import { play, skip, stop, help } from './handlers/commandHandler.js';
 import { isCringe } from './handlers/cringeHandler.js';
@@ -61,20 +60,4 @@ client.on('messageCreate', async (message) => {
     }
 });
 
-readFile(new URL('./../config.json', import.meta.url)).then((content) => {
-    try {
-        const conf = JSON.parse(content);
-
-        if (conf.token) {
-            client.login(conf.token);
-        } else {
-            throw 'Missing Token.';
-        }
-    } catch (e) {
-        if (e instanceof SyntaxError) {
-            logger.error('Invalid Configuration File.');
-        } else {
-            logger.error(e);
-        }
-    }
-});
+client.login(process.env.TOKEN);
