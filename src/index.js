@@ -1,8 +1,8 @@
 import { readFile } from 'fs/promises';
 import { Client, Intents } from 'discord.js';
-import { play, skip, stop, help } from './commandHandler.js';
-import { isCringe } from './cringeHandler.js';
-import logger from './logHandler.js';
+import { play, skip, stop, help } from './handlers/commandHandler.js';
+import { isCringe } from './handlers/cringeHandler.js';
+import logger from './handlers/logHandler.js';
 import Bot from './Bot.js';
 
 const client = new Client({
@@ -61,7 +61,7 @@ client.on('messageCreate', async (message) => {
     }
 });
 
-readFile(new URL('./config.json', import.meta.url)).then((content) => {
+readFile(new URL('./../config.json', import.meta.url)).then((content) => {
     try {
         const conf = JSON.parse(content);
 

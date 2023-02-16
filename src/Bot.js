@@ -4,7 +4,7 @@ import {
     joinVoiceChannel,
     VoiceConnectionStatus,
 } from '@discordjs/voice';
-import logger from './logHandler.js';
+import logger from './handlers/logHandler.js';
 
 function Bot() {
     this.connection = null;
