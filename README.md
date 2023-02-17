@@ -1,6 +1,6 @@
 # Taralbot
 
-![License DBAD](https://img.shields.io/badge/license-DBAD-brightgreen) ![Version v0.3.1](https://img.shields.io/badge/version-v0.3.1-blue)
+![License DBAD](https://img.shields.io/badge/license-DBAD-brightgreen) ![Version v0.3.2](https://img.shields.io/badge/version-v0.3.2-blue)
 
 _Taralbok's finest Discord bot._
 
