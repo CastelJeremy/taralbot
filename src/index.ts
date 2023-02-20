@@ -15,7 +15,7 @@ const instances = new Map();
 
 logger.info('Starting...');
 
-client.once('ready', async () => {
+client.once('ready', async (client) => {
     logger.info(`Logged in as ${client.user.tag}`);
 
     const guilds = await client.guilds.fetch();
@@ -56,7 +56,7 @@ client.on('messageCreate', async (message) => {
                 'Ce message à été jugé comme "CRINGE" par mon IA :saluting_face:'
             );
         }
-    } catch (e) {
+    } catch (e: any) {
         logger.error(e);
     }
 });
