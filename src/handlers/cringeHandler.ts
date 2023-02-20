@@ -7,7 +7,7 @@
  *
  * @return {Boolean} True if cringe, else False
  */
-function isCringe(message) {
+export function isCringe(message: string) {
     let size = 0;
     let nbCringe = 0;
     let nbCringeWord = 0;
@@ -59,5 +59,3 @@ function isCringe(message) {
 
     return false;
 }
-
-export { isCringe };

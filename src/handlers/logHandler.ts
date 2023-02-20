@@ -1,4 +1,4 @@
-function log(message) {
+function log(message: string) {
     const now = new Date();
 
     let timeString = '[';
@@ -38,11 +38,11 @@ function log(message) {
     console.log(timeString + message);
 }
 
-function info(message) {
+function info(message: string) {
     log(message);
 }
 
-function error(message) {
+function error(message: string) {
     log(message);
 }
 
