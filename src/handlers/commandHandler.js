@@ -11,7 +11,6 @@ async function play(bot, message) {
 
     if (
         bot.connection &&
-        bot.connection.joinConfig.guildId == message.guild.id &&
         bot.connection.joinConfig.channelId != message.member.voice.channel.id
     ) {
         bot.leaveVoiceChannel();
@@ -20,7 +19,6 @@ async function play(bot, message) {
     if (!bot.connection) {
         bot.joinVoiceChannel(
             message.member.voice.channel.id,
-            message.guild.id,
             message.guild.voiceAdapterCreator
         );
     }

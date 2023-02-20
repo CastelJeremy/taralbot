@@ -6,7 +6,8 @@ import {
 } from '@discordjs/voice';
 import logger from './handlers/logHandler.js';
 
-function Bot() {
+function Bot(guildId) {
+    this.guildId = guildId;
     this.connection = null;
     this.player = null;
     this.idling = null;
@@ -14,7 +15,7 @@ function Bot() {
 }
 
 Bot.prototype.onIdle = function () {
-    logger.info(`${this.connection.joinConfig.guildId} - Idling`);
+    logger.info(`${this.guildId} - Idling`);
 
     if (this.queue.length > 0) {
         this.play(this.queue.shift());
@@ -39,10 +40,9 @@ Bot.prototype.onDisconnect = function () {
 
 Bot.prototype.joinVoiceChannel = function (
     channelId,
-    guildId,
     voiceAdapterCreator
 ) {
-    logger.info(`${guildId} - Joining ${guildId}`);
+    logger.info(`${this.guildId} - Joining ${channelId}`);
 
     if (!this.player) {
         this.player = createAudioPlayer();
@@ -51,7 +51,7 @@ Bot.prototype.joinVoiceChannel = function (
 
     this.connection = joinVoiceChannel({
         channelId: channelId,
-        guildId: guildId,
+        guildId: this.guildId,
         adapterCreator: voiceAdapterCreator,
     });
 
@@ -70,10 +70,10 @@ Bot.prototype.joinVoiceChannel = function (
 Bot.prototype.play = function (resource) {
     if (this.player) {
         if (this.player.state.status === AudioPlayerStatus.Idle) {
-            logger.info(`${this.connection.joinConfig.guildId} - Playing`);
+            logger.info(`${this.guildId} - Playing`);
             this.player.play(resource);
         } else {
-            logger.info(`${this.connection.joinConfig.guildId} - Enqueuing`);
+            logger.info(`${this.guildId} - Enqueuing`);
             this.queue.push(resource);
         }
     }
@@ -82,7 +82,7 @@ Bot.prototype.play = function (resource) {
 };
 
 Bot.prototype.stop = function () {
-    logger.info(`${this.connection.joinConfig.guildId} - Stopping`);
+    logger.info(`${this.guildId} - Stopping`);
 
     if (this.player) {
         this.player.stop();
@@ -90,7 +90,7 @@ Bot.prototype.stop = function () {
 };
 
 Bot.prototype.clear = function () {
-    logger.info(`${this.connection.joinConfig.guildId} - Clearing`);
+    logger.info(`${this.guildId} - Clearing`);
 
     if (this.queue.length > 0) {
         this.queue = [];
@@ -99,7 +99,7 @@ Bot.prototype.clear = function () {
 
 Bot.prototype.leaveVoiceChannel = function () {
     logger.info(
-        `${this.connection.joinConfig.guildId} - Leaving ${this.connection.joinConfig.channelId}`
+        `${this.guildId} - Leaving ${this.connection.joinConfig.channelId}`
     );
 
     this.connection.disconnect();

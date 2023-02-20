@@ -11,7 +11,7 @@ const client = new Client({
         Intents.FLAGS.GUILD_VOICE_STATES,
     ],
 });
-const instances = {};
+const instances = new Map();
 
 logger.info('Starting...');
 
@@ -21,13 +21,14 @@ client.once('ready', async () => {
     const guilds = await client.guilds.fetch();
 
     guilds.forEach((value, key) => {
-        instances[key] = new Bot();
+        instances.set(key, new Bot(key));
     });
 });
 
 client.on('messageCreate', async (message) => {
     try {
-        if (message.content.startsWith('!tbk')) {
+        const instance = instances.get(message.guildId);
+        if (message.content.startsWith('!tbk') && instance) {
             const cmd = message.content.split(' ')[1];
             logger.info(
                 `${message.guildId} - ${message.author.id}: ${message.content}`
@@ -35,13 +36,13 @@ client.on('messageCreate', async (message) => {
 
             switch (cmd) {
                 case 'play':
-                    await play(instances[message.guildId], message);
+                    await play(instance, message);
                     break;
                 case 'skip':
-                    skip(instances[message.guildId]);
+                    skip(instance);
                     break;
                 case 'stop':
-                    stop(instances[message.guildId]);
+                    stop(instance);
                     break;
                 case 'help':
                     help(message);
