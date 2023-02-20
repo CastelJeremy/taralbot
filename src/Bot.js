@@ -31,7 +31,7 @@ Bot.prototype.onIdle = function () {
 Bot.prototype.onDisconnect = function () {
     this.player = null;
 
-    if (this.connection) {
+    if (this.connection && this.connection.state.status !== VoiceConnectionStatus.Destroyed) {
         this.connection.destroy();
     }
 
@@ -62,7 +62,7 @@ Bot.prototype.joinVoiceChannel = function (
         this.onDisconnect.bind(this)
     );
     this.connection.on(
-        VoiceConnectionStatus.Destroy,
+        VoiceConnectionStatus.Destroyed,
         this.onDisconnect.bind(this)
     );
 };
