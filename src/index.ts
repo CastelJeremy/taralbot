@@ -3,6 +3,7 @@ import { play, skip, stop, help } from './handlers/commandHandler.js';
 import { isCringe } from './handlers/cringeHandler.js';
 import logger from './handlers/logHandler.js';
 import Bot from './Bot.js';
+import Env from './Env.js';
 
 const client = new Client({
     intents: [
@@ -61,4 +62,4 @@ client.on('messageCreate', async (message) => {
     }
 });
 
-client.login(process.env.TOKEN);
+client.login(Env.getInstance().getToken());

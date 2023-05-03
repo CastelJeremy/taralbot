@@ -1,6 +1,6 @@
 # Taralbot
 
-![License DBAD](https://img.shields.io/badge/license-DBAD-brightgreen) ![Version v0.4.0](https://img.shields.io/badge/version-v0.4.0-blue)
+![License DBAD](https://img.shields.io/badge/license-DBAD-brightgreen) ![Version v0.4.1](https://img.shields.io/badge/version-v0.4.1-blue)
 
 _Taralbok's finest Discord bot._
 
@@ -20,7 +20,13 @@ npm install
 
 ## Configuration
 
-Edit the `config.json` file to add the security token which was previously generated and will be used to connect to the Discord API.
+Configuration is done via Environment variables.
+
+- `TOKEN`: Set your Discord API security token
+
+```
+TOKEN='XXXXXXXXXXXXXXXXXXXXXXXX.YYYYYY.ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' npm run start
+```
 
 ## Running
 
