@@ -1,6 +1,6 @@
 {
     "name": "taralbot",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "A js discord bot for Taralbok. ",
     "main": "src/index.js",
     "type": "module",
@@ -13,10 +13,14 @@
         "@discordjs/voice": "^0.7.5",
         "discord.js": "^13.3.1",
         "ffmpeg-static": "^4.4.0",
+        "luxon": "^3.3.0",
         "opusscript": "^0.0.8",
         "tweetnacl": "^1.0.3",
         "typescript": "^4.9.5",
         "ytdl-core": "^4.9.1",
         "ytsr": "^3.5.3"
+    },
+    "devDependencies": {
+        "@types/luxon": "^3.3.0"
     }
 }
