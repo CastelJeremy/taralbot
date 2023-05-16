@@ -1,6 +1,6 @@
 {
     "name": "taralbot",
-    "version": "0.4.2",
+    "version": "0.5.0",
     "description": "A js discord bot for Taralbok. ",
     "main": "src/index.js",
     "type": "module",
