@@ -9,6 +9,7 @@ import {
     isAuthorTracked,
     isChannelTracked,
 } from './handlers/attachmentHandler.js';
+import { numberToEmoji } from './handlers/emojiHandler.js';
 import Env from './Env.js';
 
 const client = new Client({
@@ -72,26 +73,35 @@ client.on('messageCreate', async (message) => {
             message.attachments.size > 0
         ) {
             let error = false;
-            message.attachments.map(
-                (attachment: MessageAttachment, key: string) => {
-                    logger.info(
-                        `${message.guildId} - ${message.author.id}: Downloading attachment ${key}`
-                    );
+            let successCount = 0;
 
-                    try {
-                        downloadAttachment(
-                            message.channelId,
-                            message.author.id,
-                            attachment
+            await Promise.all(
+                message.attachments.map(
+                    async (attachment: MessageAttachment, key: string) => {
+                        logger.info(
+                            `${message.guildId} - ${message.author.id}: Downloading attachment ${key}`
                         );
-                    } catch (e: any) {
-                        error = true;
-                        logger.error(e);
+
+                        try {
+                            await downloadAttachment(
+                                message.channelId,
+                                message.author.id,
+                                attachment
+                            );
+
+                            successCount++;
+                        } catch (e: any) {
+                            error = true;
+                            logger.error(e);
+                        }
                     }
-                }
+                )
             );
 
-            if (!error) {
+            message.react(numberToEmoji(successCount));
+            if (error) {
+                message.react('❌');
+            } else {
                 message.react('💾');
             }
         }

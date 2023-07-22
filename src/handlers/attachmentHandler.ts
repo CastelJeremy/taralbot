@@ -79,7 +79,7 @@ export function downloadAttachment(
         '.' +
         resolveMimeType(attachment.contentType);
 
-    fetch(attachment.url)
+    return fetch(attachment.url)
         .then((res) => res.arrayBuffer())
         .then((buffer) => {
             fs.writeFileSync(filePath, Buffer.from(buffer));
