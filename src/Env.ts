@@ -5,6 +5,7 @@ class Env {
     private token!: string;
     private trackedChannels: Map<string, string>;
     private trackedUsers: Map<string, string>;
+    private checkAttachmentOnstart: boolean;
 
     private constructor() {
         if (!process.env.TOKEN) {
@@ -60,6 +61,11 @@ class Env {
                 throw new Error('Invalid tracked user property');
             }
         });
+
+        this.checkAttachmentOnstart = false;
+        if (process.env.CHECK_ATTACHMENT_ONSTART && process.env.CHECK_ATTACHMENT_ONSTART == 'true') {
+            this.checkAttachmentOnstart = true;
+        }
     }
 
     static getInstance() {
@@ -80,6 +86,10 @@ class Env {
 
     getTrackedUsers() {
         return this.trackedUsers;
+    }
+
+    getCheckAttachmentOnstart() {
+        return this.checkAttachmentOnstart;
     }
 }
 

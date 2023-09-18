@@ -3,13 +3,11 @@ import { play, skip, stop, help } from './handlers/commandHandler.js';
 import { isCringe } from './handlers/cringeHandler.js';
 import logger from './handlers/logHandler.js';
 import Bot from './Bot.js';
-import { MessageAttachment } from 'discord.js';
 import {
-    downloadAttachment,
+    downloadMessageAttachments,
     isAuthorTracked,
     isChannelTracked,
 } from './handlers/attachmentHandler.js';
-import { numberToEmoji } from './handlers/emojiHandler.js';
 import Env from './Env.js';
 
 const client = new Client({
@@ -32,6 +30,47 @@ client.once('ready', async (client) => {
     guilds.forEach((value, key) => {
         instances.set(key, new Bot(key));
     });
+
+    if (Env.getInstance().getCheckAttachmentOnstart()) {
+        guilds.forEach(async (value, key) => {
+            const guild = await value.fetch();
+            const channels = await guild.channels.fetch();
+
+            channels.forEach(async (channel) => {
+                if (
+                    channel &&
+                    Env.getInstance().getTrackedChannels().has(channel.id) &&
+                    channel.isText()
+                ) {
+                    logger.info(`Parsing channel ${guild.id} - ${channel.id}`);
+                    let lastMessage;
+                    let messages;
+
+                    do {
+                        messages = await channel.messages.fetch({
+                            limit: 100,
+                            before: lastMessage,
+                        });
+                        lastMessage = messages.last()?.id;
+
+                        const filteredMessages = messages.filter(
+                            (message) => message.attachments.size > 0
+                        );
+
+                        filteredMessages.forEach((message) => {
+                            const reaction = message.reactions.resolve('💾');
+
+                            if (!reaction || !reaction.me) {
+                                downloadMessageAttachments(message);
+                            }
+                        });
+                    } while (messages.size == 100 && lastMessage);
+
+                    logger.info(`Finished parsing ${guild.id} - ${channel.id}`);
+                }
+            });
+        });
+    }
 });
 
 client.on('messageCreate', async (message) => {
@@ -72,38 +111,7 @@ client.on('messageCreate', async (message) => {
             isAuthorTracked(message.author.id) &&
             message.attachments.size > 0
         ) {
-            let error = false;
-            let successCount = 0;
-
-            await Promise.all(
-                message.attachments.map(
-                    async (attachment: MessageAttachment, key: string) => {
-                        logger.info(
-                            `${message.guildId} - ${message.author.id}: Downloading attachment ${key}`
-                        );
-
-                        try {
-                            await downloadAttachment(
-                                message.channelId,
-                                message.author.id,
-                                attachment
-                            );
-
-                            successCount++;
-                        } catch (e: any) {
-                            error = true;
-                            logger.error(e);
-                        }
-                    }
-                )
-            );
-
-            message.react(numberToEmoji(successCount));
-            if (error) {
-                message.react('❌');
-            } else {
-                message.react('💾');
-            }
+            await downloadMessageAttachments(message);
         }
     } catch (e: any) {
         logger.error(e);

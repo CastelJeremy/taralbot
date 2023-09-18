@@ -1,8 +1,9 @@
-import { MessageAttachment } from 'discord.js';
+import { Message, MessageAttachment } from 'discord.js';
 import logger from './logHandler.js';
 import fs from 'fs';
 import Env from '../Env.js';
 import { DateTime } from 'luxon';
+import { numberToEmoji } from './emojiHandler.js';
 
 const MINECRAFT_SCREENSHOT_REGEX =
     /^[0-9]{4}-[0-9]{2}-[0-9]{2}_[0-9]{2}\.[0-9]{2}\.[0-9]{2}.*$/;
@@ -85,4 +86,39 @@ export function downloadAttachment(
             fs.writeFileSync(filePath, Buffer.from(buffer));
             logger.info(`Downloaded attachment ${attachment.id}`);
         });
+}
+
+export async function downloadMessageAttachments(message: Message) {
+    let error = false;
+    let successCount = 0;
+
+    await Promise.all(
+        message.attachments.map(
+            async (attachment: MessageAttachment, key: string) => {
+                logger.info(
+                    `${message.guildId} - ${message.author.id}: Downloading attachment ${key}`
+                );
+
+                try {
+                    await downloadAttachment(
+                        message.channelId,
+                        message.author.id,
+                        attachment
+                    );
+
+                    successCount++;
+                } catch (e: any) {
+                    error = true;
+                    logger.error(e);
+                }
+            }
+        )
+    );
+
+    message.react(numberToEmoji(successCount));
+    if (error) {
+        message.react('❌');
+    } else {
+        message.react('💾');
+    }
 }

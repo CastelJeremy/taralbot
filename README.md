@@ -40,6 +40,12 @@ TRACKED_CHANNELS='{"XXXXXXXXXXXXXXXXXXX":"/tmp/backup/channel1"}'
 TRACKED_USERS='{"XXXXXXXXXXXXXX":"JohnSmith"}'
 ```
 
+-   `CHECK_ATTACHMENT_ONSTART` (default=FALSE): Boolean value wich enable or disable parsing old missing attachments from tracked channels.
+
+```
+CHECK_ATTACHMENT_ONSTART=false
+```
+
 ## Running
 
 Start the bot with npm :
